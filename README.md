@@ -104,9 +104,6 @@ python deployment/deploy.py --model pretrained_models/rf_3class.h --port COM3
 - [ML Implementation](random_forest_embedded.md)
 - [Project Summary](PROJECT_SUMMARY.md)
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## Acknowledgments
 

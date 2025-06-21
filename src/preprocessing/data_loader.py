@@ -1,11 +1,3 @@
-# /*---------------------------------------------------------------------------------------------
-#  * Copyright (c) 2022-2023 STMicroelectronics.
-#  * All rights reserved.
-#  *
-#  * This software is licensed under terms that can be found in the LICENSE file in
-#  * the root directory of this software component.
-#  * If no LICENSE file comes with this software, it is provided AS-IS.
-#  *--------------------------------------------------------------------------------------------*/
 
 import os
 import string
@@ -15,7 +7,6 @@ import numpy as np
 import tensorflow as tf
 from tqdm import tqdm
 from typing import Tuple, List
-from src.utils import hand_posture_dict
 
 
 def _get_ds(data_path: str = None,
@@ -158,11 +149,6 @@ def _get_ds(data_path: str = None,
     X1_norm[zheaders["signal_per_spad"]] = (X1[zheaders["signal_per_spad"]] - 281) / 452
 
 
-    '''y values change to [0,1,2,...]'''
-    newdict = {key: hand_posture_dict[key] for key in class_names}
-    newdict = dict(sorted(newdict.items(), key=lambda item: item[1]))
-    class_names = list(newdict)
-    labeldict = {newdict[key]: index for index, key in enumerate(list(newdict))}
     for i in list(labeldict):
         y1[index_GestureGT] = np.where(y1[index_GestureGT] == i,
                                        labeldict[i], y1[index_GestureGT])

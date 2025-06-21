@@ -54,7 +54,7 @@ ST_VL53L8CX_handposture_dataset/
 .........npz/
 ............
 ```
-The names of the subdirectories under the dataset root directory are the names of the classes. They have to be aligned with the class names defined in [handposture_dictionnary.py](../utils/handposture_dictionnary.py).
+The names of the subdirectories under the dataset root directory are the names of the classes. They have to be aligned with the class names defined in [tsl_gesture_dictionary.py](../utils/tsl_gesture_dictionary.py).
 
 If you want to increase your dataset or create new classes, the datalogging tool can be downloaded on [ST.com](https://www.st.com/en/embedded-software/stsw-img035.html).
 

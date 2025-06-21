@@ -1,11 +1,3 @@
-#  /*---------------------------------------------------------------------------------------------
-#  * Copyright (c) 2022-2023 STMicroelectronics.
-#  * All rights reserved.
-#  *
-#  * This software is licensed under terms that can be found in the LICENSE file in
-#  * the root directory of this software component.
-#  * If no LICENSE file comes with this software, it is provided AS-IS.
-#  *--------------------------------------------------------------------------------------------*/
 
 import ssl
 
@@ -21,7 +13,7 @@ from hydra.core.hydra_config import HydraConfig
 from omegaconf import OmegaConf, DictConfig, open_dict
 
 from common.utils import get_model_name_and_its_input_shape
-from .handposture_dictionnary import hand_posture_dict
+from .tsl_gesture_dictionary import basic_gesture_dict as gesture_dict
 
 
 def gen_h_user_file(config: DictConfig = None, model_path: str = None) -> None:
@@ -40,7 +32,7 @@ def gen_h_user_file(config: DictConfig = None, model_path: str = None) -> None:
 
     params = Flags(**config)
     '''y values change to [0,1,2,...] -> change the class names order to be aligned with the model'''
-    newdict = {key: hand_posture_dict[key] for key in params.dataset.class_names}
+    newdict = {key: gesture_dict[key] for key in params.dataset.class_names}
     newdict = dict(sorted(newdict.items(), key=lambda item: item[1]))
     params.dataset.class_names = list(newdict)
     class_names = list(newdict)
@@ -51,10 +43,10 @@ def gen_h_user_file(config: DictConfig = None, model_path: str = None) -> None:
     for i, x in enumerate(class_names):
         if i == (len(class_names) - 1):
             classes = classes + '   "' + str(x) + '"' + '};\\\n'
-            evk_labels = evk_labels + '   ' + str(hand_posture_dict[x]) + '};\\\n'
+            evk_labels = evk_labels + '   ' + str(gesture_dict[x]) + '};\\\n'
         else:
             classes = classes + '   "' + str(x) + '"' + ' ,' + ('\\\n' if (i % 5 == 0 and i != 0) else '')
-            evk_labels = evk_labels + '   ' + str(hand_posture_dict[x]) + ' ,' + ('\\\n' if (i % 5 == 0 and i != 0) else '')
+            evk_labels = evk_labels + '   ' + str(gesture_dict[x]) + ' ,' + ('\\\n' if (i % 5 == 0 and i != 0) else '')
 
     path = os.path.join(HydraConfig.get().runtime.output_dir, "C_header/")
     try:
@@ -71,16 +63,10 @@ def gen_h_user_file(config: DictConfig = None, model_path: str = None) -> None:
         f.write("  ******************************************************************************\n")
         f.write("  * @attention\n")
         f.write("  *\n")
-        f.write("  * Copyright (c) 2022 STMicroelectronics.\n")
-        f.write("  * All rights reserved.\n")
         f.write("  *\n")
-        f.write("  * This software is licensed under terms that can be found in the LICENSE file in\n")
-        f.write("  * the root directory of this software component.\n")
-        f.write("  * If no LICENSE file comes with this software, it is provided AS-IS.\n")
         f.write("  *\n")
         f.write("  ******************************************************************************\n")
         f.write("  */\n\n")
-        f.write("/* ---------------    Generated code    ----------------- */\n")
         f.write("#ifndef __AI_MODEL_CONFIG_H__\n")
         f.write("#define __AI_MODEL_CONFIG_H__\n\n\n")
         f.write("/* I/O configuration */\n")

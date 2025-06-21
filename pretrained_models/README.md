@@ -137,9 +137,6 @@ python src/utils/model_to_c.py --model saved_models/best_model.pkl --output my_m
 | RF Inference (3-class) | 800 | 10% |
 | Total Pipeline | 2000 | 25% |
 
-## License
-
-These models are provided under the MIT License. See LICENSE file for details.
 
 ## Contributing
 

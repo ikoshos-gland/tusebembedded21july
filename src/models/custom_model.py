@@ -1,11 +1,3 @@
-# /*---------------------------------------------------------------------------------------------
-#  * Copyright (c) 2022 STMicroelectronics.
-#  * All rights reserved.
-#  *
-#  * This software is licensed under terms that can be found in the LICENSE file in
-#  * the root directory of this software component.
-#  * If no LICENSE file comes with this software, it is provided AS-IS.
-#  *--------------------------------------------------------------------------------------------*/
 from typing import Tuple, Optional
 import tensorflow as tf
 from tensorflow.keras import layers
@@ -28,7 +20,6 @@ def get_custom_model(num_classes: int = None, input_shape: Tuple[int, int, int] 
     input_shape = (input_shape[0], input_shape[1], input_shape[2])
     inputs = tf.keras.Input(shape=input_shape)
 
-    # ---------------------------------------------------------------------------------------
 
     # Define the feature extraction layers
     x = layers.Conv2D(16, (3, 3), strides=(1, 1), padding='same', use_bias=False)(inputs)
@@ -52,7 +43,6 @@ def get_custom_model(num_classes: int = None, input_shape: Tuple[int, int, int] 
     else:
         outputs = tf.keras.layers.Dense(1, activation="sigmoid")(x)
     model = tf.keras.Model(inputs=inputs, outputs=outputs, name="CNN2D_ST_HandPosture")
-    # ---------------------------------------------------------------------------------------
 
     return model
 

@@ -382,7 +382,6 @@ typedef struct {
 - [ ] EMC testing (if required)
 - [ ] Safety analysis
 - [ ] CE marking preparation
-- [ ] Open-source license selection
 
 ### 6.4 Future Enhancements
 - [ ] Online learning capability

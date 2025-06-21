@@ -1,11 +1,3 @@
-#  /*---------------------------------------------------------------------------------------------
-#  * Copyright (c) 2022-2023 STMicroelectronics.
-#  * All rights reserved.
-#  *
-#  * This software is licensed under terms that can be found in the LICENSE file in
-#  * the root directory of this software component.
-#  * If no LICENSE file comes with this software, it is provided AS-IS.
-#  *--------------------------------------------------------------------------------------------*/
 
 import os
 from pathlib import Path
@@ -18,7 +10,6 @@ from omegaconf import OmegaConf, DictConfig
 from munch import DefaultMunch
 import tensorflow as tf
 from typing import Dict, List
-from .handposture_dictionnary import hand_posture_dict
 
 
 def _check_dataset_paths_and_contents(cfg, mode: str = None, mode_groups: DictConfig = None) -> None:
@@ -84,11 +75,6 @@ def _parse_dataset_section(cfg: DictConfig, mode: str = None, mode_groups: DictC
     # cfg.check_image_files = cfg.check_image_files if cfg.check_image_files is not None else False
     # cfg.seed = cfg.seed if cfg.seed else 123
 
-    # Sort the class names if they were provided
-    if cfg.class_names:
-        newdict = {key: hand_posture_dict[key] for key in cfg.class_names}
-        newdict = dict(sorted(newdict.items(), key=lambda item: item[1]))
-        cfg.class_names = list(newdict)
 
     # Check the value of validation_split if it is set
     if cfg.validation_split:
