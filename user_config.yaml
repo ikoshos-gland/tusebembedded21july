@@ -1,0 +1,153 @@
+general:
+  project_name: semg_hand_prosthesis
+  model_path:  # Optional: path to existing model
+  logs_dir: logs
+  saved_models_dir: saved_models
+  display_figures: True
+  global_seed: 42
+  gpu_memory_limit: 8
+  deterministic_ops: True
+
+operation_mode: training
+# choices=['training', 'evaluation', 'deployment', 'benchmarking']
+
+dataset:
+  name: TSL_3class_dataset
+  class_names: [open_hand, closed_fist, peace_sign]  # Initial 3 classes
+  # For full TSL: [A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, Space, Delete, Enter]
+  training_path: ./datasets/TSL_3class_dataset  # Mandatory
+  validation_path:    # Optional
+  validation_split: 0.2  # Optional, default value is 0.2
+  test_path:          # Optional
+  
+  # EMG-specific parameters
+  sampling_rate: 1000  # Hz
+  channels: 4
+  window_size: 256
+  overlap: 0.5
+
+preprocessing:  # Mandatory
+  # EMG filtering
+  bandpass:
+    low_freq: 20    # Hz
+    high_freq: 500  # Hz
+    order: 4
+  
+  notch_filter:
+    freq: 50        # Hz (powerline)
+    quality: 30
+  
+  # Feature extraction
+  features:
+    time_domain: [rms, mav, var, zc, ssc, wl]
+    frequency_domain: [mean_freq, median_freq, band_power]
+  
+  # STFT parameters
+  stft:
+    window_size: 64
+    window_type: hamming
+    overlap: 0.5
+
+data_augmentation:  # Optional section
+  gaussian_noise:
+    snr_db: [20, 40]  # Signal-to-noise ratio range
+  
+  time_shift:
+    max_shift: 10     # samples
+  
+  amplitude_scaling:
+    scale_range: [0.8, 1.2]
+
+training:
+  model:
+    type: random_forest
+    n_estimators: 15
+    max_depth: 6
+    max_features: sqrt
+    min_samples_split: 5
+    min_samples_leaf: 3
+    random_state: 42
+  
+  # Alternative: Neural Network
+  # model:
+  #   type: cnn1d
+  #   architecture: custom
+  #   layers: [64, 128, 64]
+  #   dropout: 0.2
+  #   input_shape: (256, 4)  # window_size x channels
+  
+  validation:
+    k_fold: 5
+    stratified: True
+  
+  optimization:
+    quantization: True
+    pruning_threshold: 0.01
+  
+  save_format: [pkl, h5, c_header]
+  
+  # For neural networks only:
+  # batch_size: 32
+  # epochs: 100
+  # optimizer:
+  #   Adam:
+  #     learning_rate: 0.001
+  # callbacks:
+  #   ReduceLROnPlateau:
+  #     monitor: val_loss
+  #     factor: 0.1
+  #     patience: 10
+  #   EarlyStopping:
+  #     monitor: val_accuracy
+  #     patience: 20
+
+tools:
+  stedgeai:
+    version: 10.0.0
+    optimization: balanced  # balanced, time, ram
+    on_cloud: True
+    path_to_stedgeai: C:/Users/<USERNAME>/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/10.0.0/Utilities/windows/stedgeai.exe
+  path_to_cubeIDE: C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/stm32cubeide.exe
+
+benchmarking:
+  board: NUCLEO-H7S3L8  # Updated for our target board
+  metrics: [inference_time, ram_usage, flash_usage, accuracy]
+
+deployment:
+  c_project_path: ./src/
+  IDE: STM32CubeIDE
+  verbosity: 1
+  hardware_setup:
+    serie: STM32H7
+    board: NUCLEO-H7S3L8
+    
+  # EMG-specific settings
+  emg_config:
+    adc: ADS1299
+    channels: 4
+    gain: 24
+    reference: external
+    
+  accelerometer_config:
+    sensor: LIS3DH
+    interface: I2C
+    address: 0x18
+    odr: 104  # Hz
+    
+  servo_config:
+    count: 6
+    pwm_frequency: 50  # Hz
+    min_pulse: 1000    # microseconds
+    max_pulse: 2000    # microseconds
+    
+  communication:
+    uart_baudrate: 115200
+    spi_speed: 10000000  # 10 MHz for ADS1299
+    i2c_speed: 400000    # 400 kHz for LIS3DH
+
+mlflow:
+  uri: ./src/experiments_outputs/mlruns
+
+hydra:
+  run:
+    dir: ./src/experiments_outputs/${now:%Y_%m_%d_%H_%M_%S}
