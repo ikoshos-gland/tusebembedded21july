@@ -259,9 +259,6 @@ Total:           142 KB  (28% utilization)
 - Email: embedded@example.com
 - Discord: #semg-prosthesis
 
-## License
-
-This project is released under the MIT License. See LICENSE file for details.
 
 ## Acknowledgments
 
