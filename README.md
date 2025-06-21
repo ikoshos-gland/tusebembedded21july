@@ -41,8 +41,8 @@ This project implements a real-time surface EMG (sEMG) based gesture recognition
 ### 2. Firmware Development
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd stm32ai-modelzoo-services/hand_posture
+git clone [<repository-url>](https://github.com/ikoshos-gland/tusebembedded21july)
+cd tusebembedded21july
 
 # Open in STM32CubeIDE
 # Build and flash firmware
